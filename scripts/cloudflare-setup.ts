@@ -2,7 +2,7 @@
  * Optional hardening for a Cloudflare deployment: stores your own GT_SECRET
  * and an ADMIN_TOKEN as Worker secrets.
  *
- *   npm run cf:setup                   preview Worker ("getting-there") — optional
+ *   npm run cf:setup                   preview Worker ("getting-there-with-claude") — optional
  *   npm run cf:setup -- --production   production Worker ("getting-there-live") — required
  *                                      before the first production deploy
  *
@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 const production = process.argv.includes('--production');
 const root = fileURLToPath(new URL('../', import.meta.url));
-const worker = production ? 'getting-there-live' : 'getting-there';
+const worker = production ? 'getting-there-live' : 'getting-there-with-claude';
 
 function wrangler(args: string[], input?: string) {
   const r = spawnSync('npx', ['wrangler', ...args, '-c', 'wrangler.jsonc', ...(production ? ['--env', 'production'] : [])], {

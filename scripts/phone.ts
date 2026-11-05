@@ -22,7 +22,7 @@ if (url) {
 } else if (existsSync(envFile) && /EXPO_PUBLIC_API_URL=\S+/.test(readFileSync(envFile, 'utf8'))) {
   console.log(`\nUsing ${readFileSync(envFile, 'utf8').trim()}\n`);
 } else {
-  console.log('\nNo server address saved, so the app opens in offline Practice mode.\nTo go live:  npm run phone -- https://getting-there.<your-name>.workers.dev\n');
+  console.log('\nNo server address saved, so the app opens in offline Practice mode.\nTo go live:  npm run phone -- https://getting-there-with-claude.hvtinnovations1.workers.dev\n');
 }
 
 const expoArgs = ['expo', 'start', ...(url ? ['--clear'] : []), ...rest];

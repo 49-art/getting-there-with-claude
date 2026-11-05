@@ -103,7 +103,7 @@ Status key: **Built** = implemented and tested in this repo. **Needs Travis** = 
 **Why.** Closes the easiest farming route (posting easy challenges to your own second account).
 
 ### D-017 · Preview and production
-**Decision.** The default Worker, `getting-there` (database `getting-there-db`), is the preview. Production is `--env production`: Worker `getting-there-live`, database `getting-there-live-db`.
+**Decision.** The default Worker, `getting-there-with-claude` (database `getting-there-db`), is the preview — renamed from `getting-there` to match the Cloudflare project Travis created. Production is `--env production`: Worker `getting-there-live`, database `getting-there-live-db`.
 **Why.** Cloudflare does not generate preview URLs for Workers that implement a Durable Object, and push-to-deploy builds deploy the default Worker. **Supersedes** the first version of this decision (`--env preview` / `getting-there-preview`).
 
 ### D-018 · Concurrency and ledger integrity

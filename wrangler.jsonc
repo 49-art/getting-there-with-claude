@@ -5,11 +5,11 @@
 // rebuilds and publishes automatically. See docs/DEPLOY.md.
 //
 // Free plan only: over-limit requests fail with an error instead of being billed.
-// The default Worker ("getting-there") is the PREVIEW. Production is a
+// The default Worker ("getting-there-with-claude") is the PREVIEW. Production is a
 // separate Worker and database, deployed only with --env production.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "getting-there",
+  "name": "getting-there-with-claude",
   "main": "apps/api/src/index.ts",
   "compatibility_date": "2026-11-01",
   "compatibility_flags": ["nodejs_compat"],

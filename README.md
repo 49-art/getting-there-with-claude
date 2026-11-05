@@ -26,11 +26,11 @@ npm install
 npm run phone
 ```
 
-A QR code appears in the terminal. iPhone: scan it with the Camera. Android: scan it from inside Expo Go. Practice mode and the motif codebook work immediately with no server. For live play (lobby, wagers, inbox, scoreboard) run it once with your Cloudflare address — `npm run phone -- https://getting-there.<you>.workers.dev` — see [`docs/PHONE.md`](docs/PHONE.md).
+A QR code appears in the terminal. iPhone: scan it with the Camera. Android: scan it from inside Expo Go. Practice mode and the motif codebook work immediately with no server. For live play (lobby, wagers, inbox, scoreboard) run it once with your Cloudflare address — `npm run phone -- https://getting-there-with-claude.hvtinnovations1.workers.dev` — see [`docs/PHONE.md`](docs/PHONE.md).
 
 ## Put it online (free, push to deploy)
 
-Connect this repo once in the Cloudflare dashboard (Workers & Pages → Create → Import a repository; build command `npm ci && npm run build`). From then on every push to `main` goes live by itself at `https://getting-there.<your-subdomain>.workers.dev`. The app creates its own database tables and preview key on first start. Production is a separate Worker, never touched until you choose. Walkthrough and cost guarantees: [`docs/DEPLOY.md`](docs/DEPLOY.md).
+Connect this repo once in the Cloudflare dashboard (Workers & Pages → Create → Import a repository; build command `npm ci && npm run build`). From then on every push to `main` goes live by itself. **Live preview: <https://getting-there-with-claude.hvtinnovations1.workers.dev>** The app creates its own database tables and preview key on first start. Production is a separate Worker, never touched until you choose. Walkthrough and cost guarantees: [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 ## Run everything locally
 

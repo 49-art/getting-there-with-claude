@@ -12,13 +12,13 @@ Everything runs on the **Cloudflare Workers Free plan**. On that plan, going ove
 
    | Setting | Value |
    |---|---|
-   | Project name | `getting-there` (it must match exactly) |
+   | Project name | `getting-there-with-claude` (must match `name` in `wrangler.jsonc`) |
    | Build command | `npm ci && npm run build` |
    | Deploy command | `npx wrangler deploy` (usually filled in already) |
    | Root directory | leave empty |
 
 4. Press **Save and Deploy**. The first build takes about 3–5 minutes.
-5. Your app is at `https://getting-there.<your-subdomain>.workers.dev` — open it on your computer or your phone.
+5. Your app is at `https://getting-there-with-claude.<your-subdomain>.workers.dev` — open it on your computer or your phone. Travis's live preview: <https://getting-there-with-claude.hvtinnovations1.workers.dev>
 
 That's it. The app creates its own database tables and its own encryption key on first start, so there is nothing else to configure for the preview.
 
@@ -59,14 +59,14 @@ npm run deploy:preview
 Needs the admin token from `npm run cf:setup`:
 
 ```bash
-curl -X POST https://getting-there.<your-subdomain>.workers.dev/api/admin/plan \
+curl -X POST https://getting-there-with-claude.hvtinnovations1.workers.dev/api/admin/plan \
   -H "authorization: Bearer <ADMIN_TOKEN>" -H "x-gt-client: native" -H "content-type: application/json" \
   -d '{"username":"travis","plan":"host","days":30}'
 ```
 
 ## Checking a live deployment
 
-`https://getting-there.<your-subdomain>.workers.dev/api/health` shows `ok`, which secret is in use, and whether the chip ledger balances. The full 94-check test can run against it from a terminal: `npm run smoke -- <your address>` (it creates a few test users there).
+`https://getting-there-with-claude.hvtinnovations1.workers.dev/api/health` shows `ok`, which secret is in use, and whether the chip ledger balances. The full 94-check test can run against it from a terminal: `npm run smoke -- <your address>` (it creates a few test users there).
 
 ## Free-plan limits this build runs inside
 
