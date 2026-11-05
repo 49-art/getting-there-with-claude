@@ -1,0 +1,50 @@
+# Verifies every push: engine tests, typechecks, lint, Hermes bundles,
+# web build, and the full API smoke test against a local Worker.
+# Never deploys and never needs Cloudflare credentials.
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Engine tests
+        run: npm test
+      - name: Typecheck engine, API and app
+        run: npm run typecheck
+      - name: Lint app
+        run: npm run lint
+      - name: Bundle iOS + Android (Hermes) and web
+        working-directory: apps/mobile
+        env:
+          EXPO_OFFLINE: '1'
+          CI: '1'
+        run: |
+          npx expo export --platform ios --platform android --output-dir /tmp/native-bundle
+          npx expo export --platform web --output-dir dist
+      - name: Start the Worker locally
+        working-directory: apps/api
+        run: |
+          printf 'GT_SECRET=%s\nADMIN_TOKEN=%s\nGT_ENV=development\n' "$(openssl rand -base64 33 | tr -d '\n')" "ci-admin-token-$(openssl rand -hex 12)" > .dev.vars
+          CI=1 npx wrangler d1 migrations apply getting-there --local
+          (npx wrangler dev --local --port 8787 --ip 127.0.0.1 > /tmp/wrangler.log 2>&1 &)
+          for i in $(seq 1 60); do curl -sf http://127.0.0.1:8787/api/health && break; sleep 1; done
+      - name: API smoke test (94 checks)
+        run: ADMIN_TOKEN=$(grep ADMIN_TOKEN apps/api/.dev.vars | cut -d= -f2) npm run smoke
+      - name: Worker log on failure
+        if: failure()
+        run: tail -100 /tmp/wrangler.log || true

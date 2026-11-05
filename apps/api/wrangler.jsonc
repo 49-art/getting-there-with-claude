@@ -1,0 +1,70 @@
+// GT: GET THIS — Cloudflare Worker (API + static web app + realtime).
+// Built to run entirely on the Workers FREE plan: over-limit requests fail
+// with an error instead of being billed. See docs/DEPLOY.md.
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "getting-there",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "preview_urls": false,
+
+  // The Expo web export is served as static assets (free, unmetered).
+  // Only /api/* reaches the Worker.
+  "assets": {
+    "directory": "../mobile/dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "getting-there",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  "durable_objects": {
+    "bindings": [{ "name": "ARENA", "class_name": "Arena" }]
+  },
+  // SQLite-backed Durable Objects are the only kind available on the free plan.
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Arena"] }],
+
+  "triggers": { "crons": ["*/15 * * * *"] },
+
+  "vars": {
+    "GT_ENV": "production",
+    "RAKE_BPS": "500"
+  },
+
+  "observability": { "enabled": false },
+
+  "env": {
+    // Safe preview: a separate Worker + separate database. Nothing here touches production.
+    "preview": {
+      "name": "getting-there-preview",
+      "workers_dev": true,
+      "preview_urls": false,
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "getting-there-preview",
+          "database_id": "00000000-0000-0000-0000-000000000000",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "durable_objects": {
+        "bindings": [{ "name": "ARENA", "class_name": "Arena" }]
+      },
+      "triggers": { "crons": ["*/15 * * * *"] },
+      "vars": {
+        "GT_ENV": "preview",
+        "RAKE_BPS": "500"
+      }
+    }
+  }
+}

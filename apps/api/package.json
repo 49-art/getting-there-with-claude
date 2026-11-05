@@ -1,0 +1,25 @@
+{
+  "name": "@gt/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev --local --port 8787",
+    "dict": "node --experimental-strip-types ../../scripts/build-dictionary.ts",
+    "db:migrate:local": "wrangler d1 migrations apply getting-there --local",
+    "db:migrate:preview": "wrangler d1 migrations apply getting-there-preview --remote --env preview",
+    "deploy:preview": "wrangler d1 migrations apply getting-there-preview --remote --env preview && wrangler deploy --env preview",
+    "deploy:production": "wrangler d1 migrations apply getting-there --remote && wrangler deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@gt/engine": "*",
+    "hono": "^4.13.16"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261104.1",
+    "typescript": "~6.0.3",
+    "wordlist-english": "^1.2.1",
+    "wrangler": "^4.157.0"
+  }
+}

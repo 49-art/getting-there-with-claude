@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "GT: Get This",
+    "slug": "getting-there",
+    "version": "0.1.0",
+    "scheme": "gtgetthis",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#07070D",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.hvtinnovations.gettingthere"
+    },
+    "android": {
+      "package": "com.hvtinnovations.gettingthere",
+      "adaptiveIcon": {
+        "backgroundColor": "#07070D",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/favicon.png",
+      "name": "GT: Get This",
+      "shortName": "GT",
+      "backgroundColor": "#07070D",
+      "themeColor": "#07070D"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-audio",
+      "expo-secure-store",
+      "expo-font"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+# Copy to .dev.vars for local development (never commit .dev.vars).
+# GT_SECRET must be 32+ random characters. Generate one with:
+#   node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"
+GT_SECRET=replace-with-a-long-random-string-of-at-least-32-characters
+# Optional: enables POST /api/admin/plan locally.
+ADMIN_TOKEN=replace-with-another-long-random-string
+GT_ENV=development

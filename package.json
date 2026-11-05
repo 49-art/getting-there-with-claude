@@ -1,0 +1,33 @@
+{
+  "name": "getting-there",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "GT: GET THIS \u2014 musical cipher arena. Engine, Cloudflare Worker API, Expo SDK 58 app.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "npm run test -w @gt/engine",
+    "typecheck": "npm run typecheck -w @gt/engine && npm run typecheck -w @gt/api && npm run typecheck -w mobile",
+    "simulate": "node --experimental-strip-types scripts/simulate.ts",
+    "samples": "node --experimental-strip-types scripts/generate-samples.ts",
+    "web:build": "npm run web:build -w mobile",
+    "api:dev": "npm run dev -w @gt/api --",
+    "smoke": "node --experimental-strip-types scripts/smoke.ts",
+    "deploy:preview": "npm run web:build && npm run deploy:preview -w @gt/api",
+    "phone": "npm run start -w mobile --",
+    "cf:setup": "node --experimental-strip-types scripts/cloudflare-setup.ts",
+    "lint": "npm run lint -w mobile",
+    "deploy:production": "npm run web:build && npm run deploy:production -w @gt/api"
+  },
+  "overrides": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "engines": {
+    "node": ">=22.6"
+  },
+  "license": "UNLICENSED"
+}
