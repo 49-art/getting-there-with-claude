@@ -26,26 +26,19 @@ npm install
 npm run phone
 ```
 
-A QR code appears in the terminal. iPhone: scan it with the Camera. Android: scan it from inside Expo Go. Practice mode and the motif codebook work immediately with no server. For live play (lobby, wagers, inbox, scoreboard) run it once with your Cloudflare preview address — `npm run phone -- https://getting-there-preview.<you>.workers.dev` — see [`docs/PHONE.md`](docs/PHONE.md).
+A QR code appears in the terminal. iPhone: scan it with the Camera. Android: scan it from inside Expo Go. Practice mode and the motif codebook work immediately with no server. For live play (lobby, wagers, inbox, scoreboard) run it once with your Cloudflare address — `npm run phone -- https://getting-there.<you>.workers.dev` — see [`docs/PHONE.md`](docs/PHONE.md).
 
-## Put it online (free, preview first)
+## Put it online (free, push to deploy)
 
-```bash
-npx wrangler login        # once
-npm run cf:setup          # creates the preview database and secrets
-npm run deploy:preview    # builds the web app and deploys getting-there-preview
-```
-
-You get `https://getting-there-preview.<your-subdomain>.workers.dev`. Production is never touched until you choose to. Full walkthrough and the cost guarantees: [`docs/DEPLOY.md`](docs/DEPLOY.md).
+Connect this repo once in the Cloudflare dashboard (Workers & Pages → Create → Import a repository; build command `npm ci && npm run build`). From then on every push to `main` goes live by itself at `https://getting-there.<your-subdomain>.workers.dev`. The app creates its own database tables and preview key on first start. Production is a separate Worker, never touched until you choose. Walkthrough and cost guarantees: [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 ## Run everything locally
 
 ```bash
 npm install
 npm run web:build                                   # web app → apps/mobile/dist
-cd apps/api && cp .dev.vars.example .dev.vars       # then put a long random GT_SECRET in it
-npx wrangler d1 migrations apply getting-there --local
-npm run dev                                         # http://127.0.0.1:8787 (web + API)
+cp .dev.vars.example .dev.vars                      # optional: your own GT_SECRET
+npm run api:dev                                     # http://127.0.0.1:8787 (web + API; tables create themselves)
 ```
 
 ## What's in the box
@@ -70,7 +63,7 @@ docs/             Decisions, economy evidence, deploy and phone guides.
 | Lint | `expo lint` clean (React Compiler rules) |
 | Bundles | iOS and Android Hermes bundles and the web export build; all 89 instrument samples bundled |
 | Browser run | Full journey in headless Chrome at phone size — register, practice, create, accept, decode, solve, ranks, inbox, profile — no console errors |
-| Cloudflare config | `wrangler deploy --dry-run --env preview` passes; Worker is 955 KiB (249 KiB gzipped), inside the free plan's limit |
+| Cloudflare config | `wrangler deploy --dry-run` passes for preview and production; Worker is 964 KiB (252 KiB gzipped), inside the free plan's limit |
 
 CI (`.github/workflows/ci.yml`) re-runs all of this on every push without needing any Cloudflare credentials.
 
@@ -86,8 +79,8 @@ CI (`.github/workflows/ci.yml`) re-runs all of this on every push without needin
 | `npm run web:build` | Export the web app to `apps/mobile/dist` |
 | `npm run api:dev` | Local Worker on port 8787 |
 | `npm run smoke [-- <url>]` | End-to-end API test (local by default, or your preview URL) |
-| `npm run cf:setup` | One-time Cloudflare preview setup |
-| `npm run deploy:preview` | Build and deploy the preview Worker |
+| `npm run deploy:preview` | Build and deploy the preview from a terminal (optional — pushes deploy automatically) |
+| `npm run cf:setup [-- --production]` | Store your own secrets (optional for preview, required for production) |
 
 ---
 

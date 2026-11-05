@@ -5,6 +5,7 @@ import type { AppEnv, Env } from './env.ts';
 import { errorResponse } from './http.ts';
 import { arenaStub, broadcastEnv } from './live.ts';
 import { routes } from './routes.ts';
+import { preparedEnv } from './setup.ts';
 
 export { Arena } from './arena.ts';
 
@@ -35,9 +36,20 @@ app.all('/api/*', (c) => c.json({ error: { code: 'not_found', message: 'No such 
 app.onError((err, c) => errorResponse(c, err));
 
 export default {
-  fetch: app.fetch,
+  async fetch(request, env, ctx) {
+    // Static files never reach here (see run_worker_first); every API call gets a ready database.
+    let ready: Env;
+    try {
+      ready = await preparedEnv(env);
+    } catch (err) {
+      console.error('setup failed', err);
+      return Response.json({ error: { code: 'server_error', message: 'The server is starting up. Please try again in a moment.' } }, { status: 503 });
+    }
+    return app.fetch(request, ready, ctx);
+  },
   async scheduled(_event, env, ctx) {
-    const { expired } = await expireStale(env);
-    if (expired > 0) broadcastEnv(env, ctx, [{ event: { type: 'lobby' } }, { event: { type: 'scoreboard' } }]);
+    const ready = await preparedEnv(env);
+    const { expired } = await expireStale(ready);
+    if (expired > 0) broadcastEnv(ready, ctx, [{ event: { type: 'lobby' } }, { event: { type: 'scoreboard' } }]);
   },
 } satisfies ExportedHandler<Env>;

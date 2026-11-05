@@ -133,7 +133,7 @@ Realtime events (`/api/live`): `lobby`, `scoreboard`, `challenge {challengeId}`,
 ## 11. Platform
 
 - Cloudflare Workers **free plan**: one Worker serves the API and the static web app; D1 for data; one SQLite-backed Durable Object (Arena) holds WebSockets using the hibernation API; a cron every 15 minutes expires stale challenges. Over-limit requests fail rather than bill.
-- Preview is a separate Worker (`getting-there-preview`) with its own database.
+- Push to deploy: Cloudflare rebuilds from GitHub on every push to `main`. The default Worker `getting-there` is the preview; production is a separate Worker (`getting-there-live`) and database. The Worker applies its own database migrations on first start.
 - App: Expo SDK 58, Expo Router, react-native-svg stave, expo-audio playback of deterministic synthesised samples, TanStack Query; runs in Expo Go unmodified.
 
 ## 12. Not in this build (deliberately)

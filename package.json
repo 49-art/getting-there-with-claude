@@ -20,7 +20,8 @@
     "phone": "node --experimental-strip-types scripts/phone.ts",
     "cf:setup": "node --experimental-strip-types scripts/cloudflare-setup.ts",
     "lint": "npm run lint -w mobile",
-    "deploy:production": "npm run web:build && npm run deploy:production -w @gt/api"
+    "deploy:production": "npm run web:build && npm run deploy:production -w @gt/api",
+    "build": "npm run web:build"
   },
   "overrides": {
     "react": "19.3.0",
@@ -29,5 +30,8 @@
   "engines": {
     "node": ">=22.6"
   },
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "wrangler": "^4.157.0"
+  }
 }

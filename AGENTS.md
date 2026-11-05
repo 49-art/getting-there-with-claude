@@ -6,5 +6,5 @@
 4. **Constants live in one place:** `packages/engine/src/constants.ts`. The server enforces them; the app reads them. Don't copy numbers into other files.
 5. **Before you say "done":** `npm test`, `npm run typecheck`, `npm run lint`, and `npm run smoke` against a running Worker must all pass. If you change the economy, rerun `npm run simulate` and update `docs/ECONOMY.md` with `WRITE=1`.
 6. **Expo:** the app targets SDK 58 and must keep running in Expo Go — only use modules Expo Go includes, and install with `npx expo install`. See `apps/mobile/AGENTS.md`.
-7. **Cloudflare:** free plan only. Do not add KV, R2, Queues, Workers AI, Logpush or anything that can bill. Preview deploys go to `--env preview`.
+7. **Cloudflare:** free plan only. Do not add KV, R2, Queues, Workers AI, Logpush or anything that can bill. Pushes to `main` deploy the preview Worker automatically; production is `--env production` and is Travis's call only.
 8. **Security invariants:** a decoder's device must never receive the answer, the key, or (at L5–L6) withheld instruments or pitches before resolution. The ledger is append-only and must always sum to zero.

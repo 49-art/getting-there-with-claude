@@ -4,12 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev --local --port 8787",
+    "dev": "wrangler dev -c ../../wrangler.jsonc --local --port 8787",
     "dict": "node --experimental-strip-types ../../scripts/build-dictionary.ts",
-    "db:migrate:local": "wrangler d1 migrations apply getting-there --local",
-    "db:migrate:preview": "wrangler d1 migrations apply getting-there-preview --remote --env preview",
-    "deploy:preview": "wrangler d1 migrations apply getting-there-preview --remote --env preview && wrangler deploy --env preview",
-    "deploy:production": "wrangler d1 migrations apply getting-there --remote && wrangler deploy",
+    "db:migrate:local": "wrangler d1 migrations apply getting-there-db -c ../../wrangler.jsonc --local",
+    "deploy:preview": "wrangler deploy -c ../../wrangler.jsonc",
+    "deploy:production": "wrangler deploy -c ../../wrangler.jsonc --env production",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

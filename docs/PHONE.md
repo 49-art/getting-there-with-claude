@@ -1,5 +1,7 @@
 # Open it on your phone — Expo Go, SDK 58
 
+**Quickest:** once the app is on Cloudflare, just open `https://getting-there.<your-subdomain>.workers.dev` in your phone's browser and use *Add to Home Screen*. It is the same app. The steps below are for the native version in Expo Go.
+
 The app runs unmodified in **Expo Go** (every native module it uses ships inside Expo Go). The QR code comes from the Expo dev server on your computer, so it is free and needs no Expo account.
 
 ## 1 · Install Expo Go
@@ -31,7 +33,7 @@ Out of the box the app runs **offline**: Practice (all six levels, real audio) a
 To turn on live play — accounts, lobby, wagers, inbox, scoreboard — give it your preview address once:
 
 ```bash
-npm run phone -- https://getting-there-preview.<your-subdomain>.workers.dev
+npm run phone -- https://getting-there.<your-subdomain>.workers.dev
 ```
 
 The address is saved, so from then on `npm run phone` is enough.

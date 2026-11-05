@@ -22,12 +22,15 @@ Status key: **Built** = implemented and tested in this repo. **Needs Travis** = 
 | D-014 | Cloudflare architecture | Built |
 | D-015 | Automation risk and mitigations | Built · Needs Travis |
 | D-016 | Ratings only from wagered lobby challenges | Built |
-| D-017 | Preview is a separate Worker and database | Built |
+| D-017 | Preview is the default Worker; production is separate | Built |
 | D-018 | Concurrency and ledger integrity | Built |
 | D-019 | Time-outs | Built |
 | D-020 | Removed the Expo template's MIT licence | Built |
 | D-021 | Rate limits | Built |
 | D-022 | Dependencies: open source, established | Built |
+| D-023 | Push to deploy from GitHub | Built |
+| D-024 | The Worker migrates its own database | Built |
+| D-025 | Preview generates its own key; production must be given one | Built |
 
 ---
 
@@ -99,9 +102,9 @@ Status key: **Built** = implemented and tested in this repo. **Needs Travis** = 
 **Decision.** Only wagered lobby challenges move ratings and scoreboard stats. Direct challenges move chips only. Decoders may hold at most 5 active decodes.
 **Why.** Closes the easiest farming route (posting easy challenges to your own second account).
 
-### D-017 · Preview environment
-**Decision.** `wrangler deploy --env preview` creates `getting-there-preview` with its own D1 database.
-**Why.** Cloudflare does not generate preview URLs for Workers that implement a Durable Object.
+### D-017 · Preview and production
+**Decision.** The default Worker, `getting-there` (database `getting-there-db`), is the preview. Production is `--env production`: Worker `getting-there-live`, database `getting-there-live-db`.
+**Why.** Cloudflare does not generate preview URLs for Workers that implement a Durable Object, and push-to-deploy builds deploy the default Worker. **Supersedes** the first version of this decision (`--env preview` / `getting-there-preview`).
 
 ### D-018 · Concurrency and ledger integrity
 **Decision.** Each action inserts the next (challenge_id, seq) event; a concurrent action collides on the primary key and its whole batch — including chip movements — rolls back. Balances have a CHECK ≥ 0; ledger and event tables reject UPDATE and DELETE by trigger.
@@ -118,6 +121,18 @@ Registration 8/hour/IP; sign-in 20/hour/IP and 10/hour/username; availability 60
 
 ### D-022 · Dependencies
 All libraries are open source and established more than a year: Hono, TanStack Query, Expo SDK modules, react-native-svg, Bravura glyphs (via VexFlow), SCOWL word lists, Google Fonts (OFL). Cloudflare itself is a proprietary platform — Travis's choice of host. Full list: `THIRD_PARTY_NOTICES.md`.
+
+### D-023 · Push to deploy
+**Decision.** The Cloudflare config lives at the repo root so the dashboard's "Import a repository" works with defaults: build `npm ci && npm run build`, deploy `npx wrangler deploy`. Every push to `main` goes live.
+**Why.** Matches the GitHub → Cloudflare pipeline Travis already uses with Grok; no terminal needed.
+
+### D-024 · Self-migrating database
+**Decision.** On first request the Worker applies any migration missing from `d1_migrations` (the table Wrangler uses, so both routes agree). The D1 database is found by name or created on first deploy.
+**Why.** Removes every manual database step from push-to-deploy. Tested on a fresh database: 94/94 smoke checks; `wrangler d1 migrations apply` then reports nothing to apply.
+
+### D-025 · Preview key
+**Decision.** If `GT_SECRET` is not set and the Worker is not production, it generates one and keeps it in its own database (`app_config`). Production refuses to run without a real `GT_SECRET`. `/api/health` reports which is in use.
+**Trade-off, stated once:** on the preview the key sits in the same database as the data it protects, which is weaker than a Cloudflare secret. Fine for a preview with test users; set a real key (`npm run cf:setup`) before real people sign up.
 
 ---
 

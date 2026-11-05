@@ -332,7 +332,7 @@ routes.post('/admin/plan', async (c) => {
 
 routes.get('/health', async (c) => {
   const ledger = await c.env.DB.prepare('SELECT COALESCE(SUM(balance), 0) AS total FROM accounts').first<{ total: number }>();
-  return c.json({ ok: true, env: c.env.GT_ENV, ledgerBalanced: (ledger?.total ?? 0) === 0, at: now() });
+  return c.json({ ok: c.env.SECRET_SOURCE !== 'missing', env: c.env.GT_ENV, secret: c.env.SECRET_SOURCE ?? 'configured', ledgerBalanced: (ledger?.total ?? 0) === 0, at: now() });
 });
 
 export { loadChallenge };

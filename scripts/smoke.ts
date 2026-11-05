@@ -2,7 +2,7 @@
  * End-to-end smoke test for a running GT API (local or deployed preview).
  *
  *   npm run smoke                          # http://127.0.0.1:8787
- *   npm run smoke -- https://getting-there-preview.<you>.workers.dev
+ *   npm run smoke -- https://getting-there.<you>.workers.dev
  *   ADMIN_TOKEN=... npm run smoke -- <url> # also exercises the admin plan path
  *
  * Covers: registration & recovery-key sign-in, validation, escrow, lobby,

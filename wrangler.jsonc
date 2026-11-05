@@ -1,10 +1,16 @@
 // GT: GET THIS — Cloudflare Worker (API + static web app + realtime).
-// Built to run entirely on the Workers FREE plan: over-limit requests fail
-// with an error instead of being billed. See docs/DEPLOY.md.
+//
+// Push-to-deploy: connect this GitHub repo in the Cloudflare dashboard
+// (Workers & Pages → Create → Import a repository). Every push to main then
+// rebuilds and publishes automatically. See docs/DEPLOY.md.
+//
+// Free plan only: over-limit requests fail with an error instead of being billed.
+// The default Worker ("getting-there") is the PREVIEW. Production is a
+// separate Worker and database, deployed only with --env production.
 {
-  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "$schema": "node_modules/wrangler/config-schema.json",
   "name": "getting-there",
-  "main": "src/index.ts",
+  "main": "apps/api/src/index.ts",
   "compatibility_date": "2026-11-01",
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": true,
@@ -13,18 +19,19 @@
   // The Expo web export is served as static assets (free, unmetered).
   // Only /api/* reaches the Worker.
   "assets": {
-    "directory": "../mobile/dist",
+    "directory": "apps/mobile/dist",
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
   },
 
+  // No database_id: Wrangler finds the database by name, or creates it on the
+  // first deploy. Tables are created by the Worker itself on first request.
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "getting-there",
-      "database_id": "00000000-0000-0000-0000-000000000000",
-      "migrations_dir": "migrations"
+      "database_name": "getting-there-db",
+      "migrations_dir": "apps/api/migrations"
     }
   ],
 
@@ -37,24 +44,23 @@
   "triggers": { "crons": ["*/15 * * * *"] },
 
   "vars": {
-    "GT_ENV": "production",
+    "GT_ENV": "preview",
     "RAKE_BPS": "500"
   },
 
   "observability": { "enabled": false },
 
   "env": {
-    // Safe preview: a separate Worker + separate database. Nothing here touches production.
-    "preview": {
-      "name": "getting-there-preview",
+    // Production: only when Travis decides. npm run deploy:production
+    "production": {
+      "name": "getting-there-live",
       "workers_dev": true,
       "preview_urls": false,
       "d1_databases": [
         {
           "binding": "DB",
-          "database_name": "getting-there-preview",
-          "database_id": "00000000-0000-0000-0000-000000000000",
-          "migrations_dir": "migrations"
+          "database_name": "getting-there-live-db",
+          "migrations_dir": "apps/api/migrations"
         }
       ],
       "durable_objects": {
@@ -62,7 +68,7 @@
       },
       "triggers": { "crons": ["*/15 * * * *"] },
       "vars": {
-        "GT_ENV": "preview",
+        "GT_ENV": "production",
         "RAKE_BPS": "500"
       }
     }

@@ -10,6 +10,8 @@ export interface Env {
   ADMIN_TOKEN?: string;
   GT_ENV: 'production' | 'preview' | 'development';
   RAKE_BPS: string;
+  /** Set by setup.ts: where GT_SECRET came from. */
+  SECRET_SOURCE?: 'configured' | 'auto-preview' | 'missing';
 }
 
 export interface SessionUser {
