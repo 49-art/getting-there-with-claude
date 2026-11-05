@@ -26,7 +26,7 @@ npm install
 npm run phone
 ```
 
-A QR code appears in the terminal. iPhone: scan it with the Camera. Android: scan it from inside Expo Go. Practice mode and the motif codebook work immediately with no server. For live play (lobby, wagers, inbox, scoreboard) point the app at your Cloudflare preview: see [`docs/PHONE.md`](docs/PHONE.md).
+A QR code appears in the terminal. iPhone: scan it with the Camera. Android: scan it from inside Expo Go. Practice mode and the motif codebook work immediately with no server. For live play (lobby, wagers, inbox, scoreboard) run it once with your Cloudflare preview address — `npm run phone -- https://getting-there-preview.<you>.workers.dev` — see [`docs/PHONE.md`](docs/PHONE.md).
 
 ## Put it online (free, preview first)
 
@@ -78,7 +78,7 @@ CI (`.github/workflows/ci.yml`) re-runs all of this on every push without needin
 
 | Command | Does |
 |---|---|
-| `npm run phone` | Expo dev server + QR code for Expo Go |
+| `npm run phone [-- <server address>]` | Expo dev server + QR code for Expo Go (saves the address the first time) |
 | `npm test` | Engine tests |
 | `npm run typecheck` / `npm run lint` | Static checks |
 | `npm run simulate` | Re-run the economy calibration (`WRITE=1` updates `docs/ECONOMY.md`) |

@@ -28,21 +28,19 @@ npm run phone -- --tunnel
 
 Out of the box the app runs **offline**: Practice (all six levels, real audio) and the motif codebook work, and a banner says no server is configured.
 
-To turn on live play — accounts, lobby, wagers, inbox, scoreboard — tell the app where the API is. Create `apps/mobile/.env`:
+To turn on live play — accounts, lobby, wagers, inbox, scoreboard — give it your preview address once:
 
 ```bash
-# your Cloudflare preview (see DEPLOY.md)
-EXPO_PUBLIC_API_URL=https://getting-there-preview.<your-subdomain>.workers.dev
+npm run phone -- https://getting-there-preview.<your-subdomain>.workers.dev
 ```
 
-Then restart with `npm run phone -- --clear`.
+The address is saved, so from then on `npm run phone` is enough.
 
-**Testing against your own computer instead:** run the API on your network address and use your computer's LAN IP:
+**Testing against your own computer instead:** run the API on your network address and pass your computer's LAN IP:
 
 ```bash
 npm run api:dev -- --ip 0.0.0.0
-# apps/mobile/.env
-EXPO_PUBLIC_API_URL=http://192.168.1.23:8787
+npm run phone -- http://192.168.1.23:8787
 ```
 
 ## 4 · Try a full game with two devices
@@ -60,5 +58,5 @@ To use the same account on another device: *Get started* → *I have a recovery 
 |---|---|
 | "Project is incompatible with this version of Expo Go" | Update Expo Go from the store (needs SDK 58) |
 | QR scans but loading hangs | Use `npm run phone -- --tunnel`, or check both devices share a network |
-| "Can't reach the server" | Check `EXPO_PUBLIC_API_URL`, then restart with `--clear` (env values are read at start-up) |
+| "Can't reach the server" | Run `npm run phone -- <your address>` again to re-save it (it restarts with a clean cache) |
 | No sound on iPhone | Turn the ringer up; the app asks iOS to play even in silent mode, but volume still applies |
