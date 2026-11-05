@@ -7,7 +7,7 @@ Everything runs on the **Cloudflare Workers Free plan**. On that plan, going ove
 ## One-time setup (about 10 minutes, all clicks)
 
 1. **Open Cloudflare's "create" page:** <https://dash.cloudflare.com/?to=/:account/workers-and-pages/create> (sign up free if asked).
-2. Choose **Import a repository** (Git / GitHub), and connect GitHub if asked. Pick the **getting-there** repository.
+2. Choose **Import a repository** (Git / GitHub), and connect GitHub if asked. Pick the **getting-there-with-claude** repository.
 3. Fill in the settings:
 
    | Setting | Value |
@@ -80,3 +80,5 @@ curl -X POST https://getting-there.<your-subdomain>.workers.dev/api/admin/plan \
 | Worker size | 3 MB compressed; this Worker is 252 KiB | — |
 
 Logging (Workers Logs) is switched off. Nothing in this project uses KV, R2, Queues, Workers AI, Logpush or any other product that could carry a cost.
+
+**GitHub checks:** every push also runs the project's automatic tests on GitHub (about 10 minutes each). Free private repos include 2,000 minutes a month; with no card on your GitHub account, the checks simply pause if that runs out. Nothing is billed, and going live on Cloudflare doesn't depend on them.

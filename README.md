@@ -20,8 +20,8 @@ This repository is the complete build: a tested cipher-and-economy engine, a Clo
 Needs Node 22+ and the **Expo Go** app (SDK 58) on your phone, with phone and computer on the same Wi-Fi.
 
 ```bash
-git clone https://github.com/49-art/getting-there.git
-cd getting-there
+git clone https://github.com/49-art/getting-there-with-claude.git
+cd getting-there-with-claude
 npm install
 npm run phone
 ```
